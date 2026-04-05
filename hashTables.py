@@ -94,8 +94,8 @@ def add_to_table_linked_list():
     # index = 1
     for movie in MOVIE_INFO:
         #adds movie based on title
-        hash_code_title = hash_function_attempt_1(cleanWord(movie[0]))
-        hash_code_qoute = hash_function_attempt_1(cleanWord(movie[len(movie)-1]))
+        hash_code_title = hash_function_attempt_2(cleanWord(movie[0]))
+        hash_code_qoute = hash_function_attempt_2(cleanWord(movie[len(movie)-1]))
         # if index<100:
         #     print(f"{index}:{hash_code_title}")
         #Adds the movie to the hash table based on title as key
