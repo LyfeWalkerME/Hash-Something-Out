@@ -3,7 +3,7 @@ import time
 
 
 #hash table size variable(global)
-HASH_TABLE_SIZE = 15000
+HASH_TABLE_SIZE = 20000
 
 #stores the parsed data index[0] is title index[1] is qoute
 MOVIE_INFO = []
@@ -83,18 +83,64 @@ def hash_function_attempt_2(string):
     #returns the hash code
     return value_of_string%HASH_TABLE_SIZE
 
+#Adds the moveis to the table for the linear probing method
+#Stores the hash code for the movie in the hash_code variable and then checks to see if the there is already a value in the index of the hash_code
+#Checks to see if there is a movie already stored in the index if there is it will probe till the next open index is found
+def add_to_table_linear_probing():
+    collisions_title = 0
+    collisions_qoute = 0
+    for movie in MOVIE_INFO:
+        #creates hash code for movie based on title
+        hash_code_title = hash_function_attempt_2(cleanWord(movie[0]))
+
+        #creats hash code for movie based on qoute 
+        hash_code_qoute = hash_function_attempt_2(cleanWord(movie[len(movie)-1]))
+
+        #Adds the movei to title based table
+        #If index is filled it will probe one index at a time till the data is found, loop will end once we find an empty index
+        if HASH_TABLE_MOVIE_TITLE[hash_code_title]==[None]:
+            HASH_TABLE_MOVIE_TITLE[hash_code_title]=movie
+        else:
+            index = (hash_code_title+1)%HASH_TABLE_SIZE
+            steps = 0
+            # print(HASH_TABLE_MOVIE_TITLE[1])
+            while HASH_TABLE_MOVIE_TITLE[index%HASH_TABLE_SIZE] != [None] and steps<HASH_TABLE_SIZE:
+                collisions_title+=1
+                index+=101
+                steps+=1
+            #Stores the movie data at index
+            HASH_TABLE_MOVIE_TITLE[index%HASH_TABLE_SIZE] = movie
+        
+        #Adds the movie to qoute based table
+        #If index is filled it will probe one index at a time till the data is found, loop will end once we find an empty index
+        if HASH_TABLE_MOVIE_QOUTE[hash_code_qoute]==[None]:
+            HASH_TABLE_MOVIE_QOUTE[hash_code_qoute]=movie
+        else:
+            index = (hash_code_qoute+1)%HASH_TABLE_SIZE
+            steps = 0
+            while HASH_TABLE_MOVIE_QOUTE[index%HASH_TABLE_SIZE] != [None] and steps<HASH_TABLE_SIZE:
+                collisions_qoute+=1
+                index+=101
+                steps+=1
+            #Stores the movie data at index
+            HASH_TABLE_MOVIE_QOUTE[index%HASH_TABLE_SIZE] = movie
+                
+    return collisions_title,collisions_qoute
+
+
 #Adds the movies to the table for the linked list method
 #Stores the hash code for the movie in the hash_code variable and then checks to see if the there is already a value in the index of the hash_code
 #if there isn't it replaces the None with the movie info, if there is already a movie it appends to the list
 #keeps track of collisions 
-
 def add_to_table_linked_list():
     collisions_title = 0
     collisions_qoute = 0
     # index = 1
     for movie in MOVIE_INFO:
-        #adds movie based on title
+        #creates hash code for movie based on title
         hash_code_title = hash_function_attempt_2(cleanWord(movie[0]))
+        
+        #creats hash code for movie based on qoute 
         hash_code_qoute = hash_function_attempt_2(cleanWord(movie[len(movie)-1]))
         # if index<100:
         #     print(f"{index}:{hash_code_title}")
@@ -102,15 +148,17 @@ def add_to_table_linked_list():
         if HASH_TABLE_MOVIE_TITLE[hash_code_title][0]==None:
             HASH_TABLE_MOVIE_TITLE[hash_code_title][0]=movie
         else:
+            for movie in HASH_TABLE_MOVIE_TITLE[hash_code_title]:
+                collisions_title += 1
             HASH_TABLE_MOVIE_TITLE[hash_code_title].append(movie)
-            collisions_title += 1
 
         #Adds movie to to the hash table based on qoute
         if HASH_TABLE_MOVIE_QOUTE[hash_code_qoute][0]==None:
             HASH_TABLE_MOVIE_QOUTE[hash_code_qoute][0]=movie
         else:
+            for movie in HASH_TABLE_MOVIE_QOUTE[hash_code_qoute]:
+                collisions_qoute += 1
             HASH_TABLE_MOVIE_QOUTE[hash_code_qoute].append(movie)
-            collisions_qoute += 1
         # index+=1
     
     return collisions_title, collisions_qoute
@@ -159,7 +207,7 @@ def main():
     start = time.time()
 
     #adds the movies to the hash table and returns the amount of collisions
-    collisions_title,collisions_qoute = add_to_table_linked_list()
+    collisions_title,collisions_qoute = add_to_table_linear_probing()
 
     #ends timer
     end=time.time()
@@ -172,14 +220,14 @@ def main():
 
     #Unused space/wasted space
     unused_space_title = wasted_space(HASH_TABLE_MOVIE_TITLE)
-    qoute = wasted_space(HASH_TABLE_MOVIE_QOUTE)
+    unused_space_qoute = wasted_space(HASH_TABLE_MOVIE_QOUTE)
 
     #prints time it took to complete operations
     print(f"Time to complete: {end-start}")
 
     #prints wasted space
     print(f"Unused space in title table: {unused_space_title}")
-    print(f"Unused space in qoute table: {unused_space_title}")
+    print(f"Unused space in qoute table: {unused_space_qoute}")
 
     print(f"Collisions_title: {collisions_title}")
     print(f"Collisions_qoute: {collisions_qoute}")
