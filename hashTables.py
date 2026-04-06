@@ -1,10 +1,16 @@
+#Nicholas Munro
+#Hash-Something_out
+#Purpose of the file:
+    #Stores different hash function methods and hash tables
+    #Also stores the main function and calls
+#Last modified: 4/6/26
 
 import time
 import math
 
 #hash table size variable(global)
 HASH_TABLE_SIZE = 15000
-DOUBLE_HASH_TABLE_SIZE = 100
+DOUBLE_HASH_TABLE_SIZE = 500
 
 #stores the parsed data index[0] is title index[1] is qoute
 MOVIE_INFO = []
