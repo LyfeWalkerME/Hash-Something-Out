@@ -4,7 +4,7 @@ import math
 
 #hash table size variable(global)
 HASH_TABLE_SIZE = 15000
-DOUBLE_HASH_TABLE_SIZE = 500
+DOUBLE_HASH_TABLE_SIZE = 100
 
 #stores the parsed data index[0] is title index[1] is qoute
 MOVIE_INFO = []
