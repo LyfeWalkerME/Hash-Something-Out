@@ -1,6 +1,6 @@
 
 import time
-
+import math
 
 #hash table size variable(global)
 HASH_TABLE_SIZE = 20000
@@ -83,10 +83,72 @@ def hash_function_attempt_2(string):
     #returns the hash code
     return value_of_string%HASH_TABLE_SIZE
 
+#Creates the hash code in attempt 3
+#Multiplies by a float to reduce number by a varying degree but stays consistent with the same input value.
+#Then multiplies by 10000 to and floor the value so that it is an int and not a float
+def hash_function_attempt_3(string):
+
+    #holds the strings value
+    value_of_string = 0
+
+    #adds the value of each charachter in string to string value
+    for char in string:
+        value_of_string+=ord(char)
+
+    #multiplies by 0.29 to produce a float
+    value_of_string = value_of_string*0.29
+
+    #rounds the number down to nearst integer
+    value_of_string = math.floor(value_of_string*10000)
+
+    #returns the hash code
+    return value_of_string%HASH_TABLE_SIZE
+
 #Adds the moveis to the table for the linear probing method
 #Stores the hash code for the movie in the hash_code variable and then checks to see if the there is already a value in the index of the hash_code
 #Checks to see if there is a movie already stored in the index if there is it will probe till the next open index is found
 def add_to_table_linear_probing():
+    collisions_title = 0
+    collisions_qoute = 0
+    for movie in MOVIE_INFO:
+        #creates hash code for movie based on title
+        hash_code_title = hash_function_attempt_3(cleanWord(movie[0]))
+
+        #creats hash code for movie based on qoute 
+        hash_code_qoute = hash_function_attempt_3(cleanWord(movie[len(movie)-1]))
+
+        #Adds the movei to title based table
+        #If index is filled it will probe one index at a time till the data is found, loop will end once we find an empty index
+        if HASH_TABLE_MOVIE_TITLE[hash_code_title]==[None]:
+            HASH_TABLE_MOVIE_TITLE[hash_code_title]=movie
+        else:
+            index = (hash_code_title+1)%HASH_TABLE_SIZE
+            steps = 0
+            # print(HASH_TABLE_MOVIE_TITLE[1])
+            while HASH_TABLE_MOVIE_TITLE[index%HASH_TABLE_SIZE] != [None] and steps<HASH_TABLE_SIZE:
+                collisions_title+=1
+                index+=101
+                steps+=1
+            #Stores the movie data at index
+            HASH_TABLE_MOVIE_TITLE[index%HASH_TABLE_SIZE] = movie
+        
+        #Adds the movie to qoute based table
+        #If index is filled it will probe one index at a time till the data is found, loop will end once we find an empty index
+        if HASH_TABLE_MOVIE_QOUTE[hash_code_qoute]==[None]:
+            HASH_TABLE_MOVIE_QOUTE[hash_code_qoute]=movie
+        else:
+            index = (hash_code_qoute+1)%HASH_TABLE_SIZE
+            steps = 0
+            while HASH_TABLE_MOVIE_QOUTE[index%HASH_TABLE_SIZE] != [None] and steps<HASH_TABLE_SIZE:
+                collisions_qoute+=1
+                index+=101
+                steps+=1
+            #Stores the movie data at index
+            HASH_TABLE_MOVIE_QOUTE[index%HASH_TABLE_SIZE] = movie
+                
+    return collisions_title,collisions_qoute
+
+def add_to_table_linear_probing_attempt_2():
     collisions_title = 0
     collisions_qoute = 0
     for movie in MOVIE_INFO:
