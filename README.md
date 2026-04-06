@@ -61,4 +61,4 @@ COS 226
 | Best space efficiency  | Attempt 3 |
 | Least Collisions | Attempt 5 |
 
-Overall I would say the best method is probably Attempt 2\. It had a decently low amount of unused space, the collisions were moderately low, and the time was the second quickest. While it wasn’t number 1 in any category I believe its overall performance was the best.
+Overall I would say the best method is probably Attempt 2\. It had a decently low amount of unused space, the collisions were moderately low, and the time was the second quickest. While it wasn’t number 1 in any category I believe its overall performance was the best. I believe the reason for this was the hash function itself, it allowed for the best spread of my hash functions. It also was the linked list method which helped keep the collisions to a moderate amount. It was simple but effective which helped keep the time down. 
